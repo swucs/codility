@@ -24,6 +24,7 @@ package lesson5;
  * https://app.codility.com/demo/results/trainingQ8S7EY-3SD/    => 오류 있음
  * 성능 해결 하다가 버그 생길 가능성이 높음. 아래의 코드는 정합성 오류가 있음..
  * 결론 : 그냥 loop로 합시다.
+ * https://app.codility.com/demo/results/trainingWEHJ9A-UD6/    => 100%
  */
 public class CountDiv {
 
@@ -33,18 +34,25 @@ public class CountDiv {
             return 0;
         }
 
-        int temp = A % K;
-        int firstDiv = 0;
-        if (A < K && K <= B) {
-            firstDiv = K;
-        } else if (temp > 0) {
-            firstDiv = A + (K - temp);
-        } else {
-            firstDiv = A;
+
+
+        int firstDiv = -1;
+        for (int i = A; i <= B; i++) {
+            if (i % K == 0) {
+                firstDiv = i;
+                break;
+            }
+        }
+
+        if (firstDiv == -1) {
+            return 0;
+        }
+
+        if (A == B) {
+            return A % K == 0 ? 1 : 0;
         }
 
         return ((B - firstDiv) / K) + 1;
-
     }
 
     public static void main(String[] args) {

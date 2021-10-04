@@ -1,25 +1,36 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
 public class Test {
-    public boolean solution(String[] phone_book) {
-        if (phone_book.length == 1) {
-            return true;
-        }
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] answer = {};
 
-        for (int i = 0; i < phone_book.length; i++) {
+        List<Integer> answerList = new ArrayList<>();
+        int prevWorkDay = -1;
+        int deployDay = 0;
+        for (int i = 0; i < progresses.length; i++) {
+            int remain = 100 - progresses[i];
+            int workDay = (int)Math.ceil(remain / (double)speeds[i]);
 
-            String phone1 = phone_book[i];
 
-            for (int j = 0; j < phone_book.length; j++) {
-                if (i == j) {
-                    continue;
-                }
-
-                String phone2 = phone_book[j];
-                if (phone2.startsWith(phone1)) {
-                    return false;
+            if (prevWorkDay == -1) {
+                deployDay++;
+                prevWorkDay = workDay;
+            } else {
+                if (prevWorkDay >= workDay) {
+                    deployDay++;
+                    prevWorkDay = workDay;
+                } else {
+                    answerList.add(deployDay);
+                    prevWorkDay = workDay;
+                    deployDay = 1;
                 }
             }
-        }
 
-        return true;
+        }
+        answerList.add(deployDay);
+
+        return answerList.stream().mapToInt(x -> x).toArray();
     }
 }
