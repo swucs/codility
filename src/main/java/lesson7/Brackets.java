@@ -28,8 +28,8 @@ import java.util.Stack;
 
 /**
  * )( 이 경우도 테스트에 포함되어야 함. => if (stack.isEmpty()) 추가
- * {{{(((, [()()], 테스트 필요 
- * https://app.codility.com/demo/results/training9UBC7A-3PQ/    => 62%
+ * {{{(((, [()()], 테스트 필요
+ * https://app.codility.com/demo/results/training9UBC7A-3PQ/    => 62%      => 정합성이 안맞음.
  * https://app.codility.com/demo/results/trainingV2XSCB-G5G/    => 100%     O(N)
  */
 public class Brackets {
