@@ -39,6 +39,7 @@ import java.util.Arrays;
 
 /**
  * https://app.codility.com/demo/results/trainingM9MDT6-N4D/       55% => 반환값을 이익값이므로 0이상의 값을 반환해야 함(마이너스 반환 금지)
+ * https://app.codility.com/demo/results/training4Z9N53-2TX/       66% => 정합도 100%
  * 2구역으로 배열을 나눈후 왼쪽에서는 가장 작은 수, 오른쪽에서는 가장 큰 수를 찾아 뺀 값이 가장 큰 값을 찾는다.
  *
  */
