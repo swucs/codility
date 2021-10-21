@@ -38,9 +38,18 @@ public class ChocolatesByNumbers {
         // write your code in Java SE 8
         //최대공약수를 구해야 한다. (유클리드)
         int gdc = gdc(N, M);
+
+        //최대공약수로 나눈다.
         return N / gdc;
     }
 
+    /**
+     * 최대공약수 구하기
+     * 나눠서 나머지가 0이 될 때까지 나눈다.
+     * @param a
+     * @param b
+     * @return
+     */
     private int gdc(int a, int b) {
         if (a % b == 0) {
             return b;
