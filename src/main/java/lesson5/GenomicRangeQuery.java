@@ -42,7 +42,12 @@ package lesson5;
  * 배열 P, Q의 각 요소는 [ 0 .. N − 1 ] 범위 내의 정수입니다 .
  * P[K] ≤ Q[K], 여기서 0 ≤ K < M;
  * 문자열 S는 대문자 A, C, G, T 로만 구성됩니다 .
+ * 
+ * 누적 값을 구하고 계산하는게 포인트
  */
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * https://app.codility.com/demo/results/training7FWT7V-QGD/    => 62%, O(N * M)
@@ -57,50 +62,70 @@ public class GenomicRangeQuery {
 
     public int[] solution(String S, int[] P, int[] Q) {
         // write your code in Java SE 8
-        int[] result = new int[P.length];
+        List<Integer> accumA = new ArrayList<>();
+        List<Integer> accumC = new ArrayList<>();
+        List<Integer> accumG = new ArrayList<>();
+
         char[] chars = S.toCharArray();
-        int[][] array = new int[3][S.length() + 1];
+        accumA.add(0);
+        accumC.add(0);
+        accumG.add(0);
 
         for (int i = 0; i < chars.length; i++) {
-
             if (i == 0) {
                 if (chars[i] == 'A') {
-                    array[0][1] = 1;
+                    accumA.add(1);
+                    accumC.add(0);
+                    accumG.add(0);
                 } else if (chars[i] == 'C') {
-                    array[1][1] = 1;
+                    accumA.add(0);
+                    accumC.add(1);
+                    accumG.add(0);
                 } else if (chars[i] == 'G') {
-                    array[2][1] = 1;
+                    accumA.add(0);
+                    accumC.add(0);
+                    accumG.add(1);
+                } else {
+                    accumA.add(0);
+                    accumC.add(0);
+                    accumG.add(0);
                 }
             } else {
+
+                int prevIndex = accumA.size() - 1;
+                // System.out.println("prevIndex : " + prevIndex);
+
                 if (chars[i] == 'A') {
-                    array[0][i+1] = array[0][i] + 1;
-                    array[1][i+1] = array[1][i];
-                    array[2][i+1] = array[2][i];
+                    accumA.add(accumA.get(prevIndex) + 1);
+                    accumC.add(accumC.get(prevIndex));
+                    accumG.add(accumG.get(prevIndex));
                 } else if (chars[i] == 'C') {
-                    array[0][i+1] = array[0][i];
-                    array[1][i+1] = array[1][i] + 1;
-                    array[2][i+1] = array[2][i];
+                    accumA.add(accumA.get(prevIndex));
+                    accumC.add(accumC.get(prevIndex) + 1);
+                    accumG.add(accumG.get(prevIndex));
                 } else if (chars[i] == 'G') {
-                    array[0][i+1] = array[0][i];
-                    array[1][i+1] = array[1][i];
-                    array[2][i+1] = array[2][i] + 1;
+                    accumA.add(accumA.get(prevIndex));
+                    accumC.add(accumC.get(prevIndex));
+                    accumG.add(accumG.get(prevIndex) + 1);
                 } else {
-                    array[0][i+1] = array[0][i];
-                    array[1][i+1] = array[1][i];
-                    array[2][i+1] = array[2][i];
+                    accumA.add(accumA.get(prevIndex));
+                    accumC.add(accumC.get(prevIndex));
+                    accumG.add(accumG.get(prevIndex));
                 }
             }
         }
 
-        for (int i = 0; i < P.length; i++) {
-            int startpos = P[i];
-            int endpos = Q[i] + 1;
+        // System.out.println("accumA : " + accumA);
+        // System.out.println("accumC : " + accumC);
+        // System.out.println("accumG : " + accumG);
 
-            if (array[0][endpos] - array[0][startpos] > 0) {
+        int[] result = new int[P.length];
+        for (int i = 0; i < P.length; i++) {
+            if (accumA.get(Q[i] + 1) - accumA.get(P[i]) > 0) {
                 result[i] = 1;
-            } else  if (array[1][endpos] - array[1][startpos] > 0) {
+            } else if (accumC.get(Q[i] + 1) - accumC.get(P[i]) > 0) {
                 result[i] = 2;
-            } else  if (array[2][endpos] - array[2][startpos] > 0) {
+            } else if (accumG.get(Q[i] + 1) - accumG.get(P[i]) > 0) {
                 result[i] = 3;
             } else {
                 result[i] = 4;
@@ -108,7 +133,6 @@ public class GenomicRangeQuery {
         }
 
         return result;
-
 
     }
 }

@@ -26,34 +26,38 @@ package lesson5;
  * 성능 해결 하다가 버그 생길 가능성이 높음. 아래의 코드는 정합성 오류가 있음..
  * 결론 : 그냥 loop로 합시다.
  * https://app.codility.com/demo/results/trainingWEHJ9A-UD6/    => 100%
+ * 첫번째 나눠지는 값을 먼저 구한뒤 (B - divisable) / K 값은 올림한다.
+ * B가 나눠지는 값이면 위의 값에서 +1을 해야 한다.
  */
 public class CountDiv {
 
     public int solution(int A, int B, int K) {
+        // write your code in Java SE 8
 
-        if (A > B) {
-            return 0;
-        }
-
-
-
-        int firstDiv = -1;
+        //첫번째 나눠지는 값을 구한다.
+        int firstDivisable = -1;
         for (int i = A; i <= B; i++) {
             if (i % K == 0) {
-                firstDiv = i;
+                firstDivisable = i;
                 break;
             }
         }
 
-        if (firstDiv == -1) {
+        // System.out.println("firstDivisable : " + firstDivisable);
+
+        if (firstDivisable == -1) {
             return 0;
         }
 
-        if (A == B) {
-            return A % K == 0 ? 1 : 0;
+        int result = (int)Math.ceil((B - firstDivisable) / (double)K);
+
+        //마지막값이 나눠지는 값이면 마지막값도 포함시키기위해 result + 1한다.
+        if (B % K == 0) {
+            result++;
         }
 
-        return ((B - firstDiv) / K) + 1;
+        return result;
+
     }
 
     public static void main(String[] args) {
