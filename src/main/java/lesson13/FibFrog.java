@@ -63,6 +63,10 @@ import java.util.stream.Collectors;
  * N은 [ 0 .. 100,000 ] 범위 내의 정수입니다 .
  * 배열 A의 각 요소는 0, 1 값 중 하나를 가질 수 있는 정수입니다.
  */
+
+/**
+ * https://app.codility.com/demo/results/trainingAACJRK-SY6/    => 100%
+ */
 public class FibFrog {
 
     public int solution(int[] A) {
@@ -113,7 +117,7 @@ public class FibFrog {
                     return frog.jumpCount + 1;
                 }
 
-                if (A[pos] == 1 || visited[pos] == false) {
+                if (A[pos] == 1 && visited[pos] == false) {
                     q.add(new Frog(pos, frog.jumpCount + 1));
                     visited[pos] = true;
                 }
