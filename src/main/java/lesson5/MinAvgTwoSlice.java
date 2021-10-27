@@ -51,6 +51,7 @@ import java.util.List;
 
 /**
  * https://app.codility.com/demo/results/training46CZSJ-36B/    => 60%
+ * https://app.codility.com/demo/results/trainingK5VSWQ-V86/    => 100%
  */
 public class MinAvgTwoSlice {
 
@@ -61,30 +62,31 @@ public class MinAvgTwoSlice {
         list.stream().mapToInt(x -> x).toArray();
     }
 
+    /**
+     * 수학적으로 볼때 2개짜리와 3개짜리만 체크하면 된다.
+     * @param A
+     * @return
+     */
     public int solution(int[] A) {
         // write your code in Java SE 8
-
-        int minI = 0;
-        double minAvg = A[0];
-
-        for (int i = 0; i < A.length; i++) {
-
-            long prevSum = A[i];
-
-
-            for (int j = i + 1; j < A.length; j++) {
-
-                double avg = (prevSum + A[j]) / (double)(j - i + 1);
-                if (minAvg > avg) {
-                    minI = i;
-                    minAvg = avg;
-                }
-
-                prevSum = prevSum + A[j];
+        // int result = 0;
+        double twoAvg = (A[0] + A[1]) / 2.0d;
+        double min = twoAvg;
+        int minIndex = 0;
+        for(int i = 2; i < A.length; i++) {
+            twoAvg = (A[i - 1] + A[i]) / 2.0d;
+            if (min > twoAvg) {
+                min = twoAvg;
+                minIndex = i - 1;
             }
+            double threeAvg = (A[i-2] + A[i-1] + A[i]) / 3.0d;
+            if (min > threeAvg) {
+                min = threeAvg;
+                minIndex = i - 2;
+            }
+
         }
 
-        return minI;
-
+        return minIndex;
     }
 }

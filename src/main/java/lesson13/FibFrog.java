@@ -66,68 +66,70 @@ import java.util.stream.Collectors;
 public class FibFrog {
 
     public int solution(int[] A) {
-        List<Integer> fibos = new ArrayList<>();
-        fibos.add(0);
-        fibos.add(1);
-        for (int i = 0; ; i++) {
-            int val = fibos.get(i) + fibos.get(i + 1);
-            if (val > A.length) {
-                fibos.add(val);
+        // write your code in Java SE 8
+
+        List<Integer> fibo = new ArrayList<>();
+        fibo.add(1);
+        fibo.add(1);
+        int idx = 1;
+        while (true) {
+            int v = fibo.get(idx - 1) + fibo.get(idx);
+            fibo.add(v);
+            idx++;
+            if (v > A.length) {
                 break;
             }
-
-            fibos.add(val);
-        }
-        fibos.remove(0);
-
-        int curIndex = -1;
-        int jumpCount = search(A, curIndex, fibos);
-
-        if (jumpCount == 0) {
-            return -1;
         }
 
-        return jumpCount;
+        // System.out.println(fibo);
+        Queue<Frog> q = new LinkedList<>();
+        boolean[] visited = new boolean[A.length];
+        for (int i = fibo.size() - 1; i >= 0; i--) {
+            int pos = fibo.get(i) - 1;
+            if (pos > A.length) {
+                continue;
+            }
 
-    }
+            if (pos == A.length) {
+                return 1;
+            }
 
-    private int search(int[] A, int curIndex, List<Integer> fibos) {
-        int jumpCount = 0;
-        while (true) {
-            //피보숫자를 큰 숫자부터 시작한다.
-            for (int i = fibos.size() - 1; i >=0; i--) {
-                int jump = fibos.get(i);
+            if (A[pos] == 1) {
+                q.add(new Frog(pos, 1));
+                visited[pos] = true;
+            }
+        }
 
-                if (curIndex + jump > A.length) {
-                    //끝 보다 Over한 경우 다음 fibo숫자
+        while(!q.isEmpty()) {
+            Frog frog = q.poll();
+
+            for (int i = fibo.size() - 1; i >= 0; i--) {
+                int pos = frog.pos + fibo.get(i);
+                if (pos > A.length) {
                     continue;
                 }
 
-                if (curIndex + jump == A.length) {
-                    //딱 맞게 건너간 경우 끝남.
-                    return 1;
+                if (pos == A.length) {
+                    return frog.jumpCount + 1;
                 }
 
-                if (A[curIndex + jump] == 1) {
-                    //jump했는데 나뭇잎이 있다면 점프성공
-                    int result = search(A, curIndex + jump, fibos);
-
-                    if (result == 0) {
-                        continue;
-                    } else {
-                        jumpCount++;
-                        jumpCount += result;
-                        return jumpCount;
-                    }
-
+                if (A[pos] == 1 || visited[pos] == false) {
+                    q.add(new Frog(pos, frog.jumpCount + 1));
+                    visited[pos] = true;
                 }
-
-                if (i == 0) {
-                    //끝까지 못찾은 경우 종료
-                    return 0;
-                }
-
             }
+        }
+
+        return -1;
+
+    }
+
+    class Frog {
+        int pos;
+        int jumpCount;
+        public Frog (int pos, int jumpCount) {
+            this.pos = pos;
+            this.jumpCount = jumpCount;
         }
     }
 
