@@ -27,13 +27,15 @@ class NumberOfDiscIntersections2 {
             .collect(Collectors.toList());
         
         int result = 0;
-        for (int i = 1; i < newList.size(); i++) {
+        for (int i = 0; i < newList.size() - 1; i++) {
             
-            long base = newList.get(i)[0];
-            for (int j = 0; j < i; j++) {
-                if (newList.get(j)[0] <= base && base <= newList.get(j)[1]) {
+            long base = newList.get(i)[1];
+            for (int j = i + 1; j < newList.size(); j++) {
+                if (newList.get(j)[0] <= base) {
                     //기준점이 다른 원에 교체되어 있다면
                     result++;
+                } else {
+                    break;
                 }
             }
 
