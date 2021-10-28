@@ -48,7 +48,12 @@ import java.util.*;
 
 /**
  * 전체 리더값이 결국 배열을 2개로 쪼개진 곳의 리더값이 된다.
+ 1. 전체 리더값을 구한다. 
+ 2. left의 리더 count의 누적을 배열로 구한다.
+ 3. right의 리더 count의 누적을 배열로 구한다.
+ 4. 구간별로 left와  right의 구간의 리더값이 과반수 초과하는지 검사한다.
  * https://app.codility.com/demo/results/trainingEF3A96-R3M/    => 88% O(N)
+ * https://app.codility.com/demo/results/trainingXTSDHP-NXW/    => 100% 누적값으로 로직을 변경하니 100%됨.
  */
 public class EquiLeader {
     public int solution(int[] A) {
@@ -56,54 +61,92 @@ public class EquiLeader {
 
         int result = 0;
 
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        for (int i = 0; i < A.length; i++) {
-            List<Integer> list = map.getOrDefault(A[i], new ArrayList());
-            list.add(i);
-            map.put(A[i], list);
-        }
+// you can also use imports, for example:
+import java.util.*;
 
-        final int half = A.length / 2;
+// you can write to stdout for debugging purposes, e.g.
+// System.out.println("this is a debug message");
 
+class EquiLeader {
+    public int solution(int[] A) {
+        // write your code in Java SE 8
         Integer leader = null;
-        int totalLeaderCount = 0;
-        Iterator<Map.Entry<Integer, List<Integer>>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, List<Integer>> entry = iterator.next();
-            List<Integer> list = entry.getValue();
 
-            if (list != null && list.size() > half) {
-                leader = entry.getKey();
-                totalLeaderCount = list.size();
+        int half = A.length / 2;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < A.length; i++) {
+            int count = map.getOrDefault(A[i], 0);
+            map.put(A[i], ++count);
+
+            if (count > half) {
+                leader = A[i];
                 break;
             }
         }
+
+        // System.out.println("leader : " + leader);
 
         if (leader == null) {
             return 0;
         }
 
-        int leftLeaderCount = 0;
-        int leftCount = 0;
-        int rightLeaderCount = totalLeaderCount;
-        int rightCount = A.length;
+        int[] leftLeaderSum = new int[A.length];
+        int[] rightLeaderSum = new int[A.length];
+        
         for (int i = 0; i < A.length; i++) {
-            leftCount++;
-            rightCount--;
-
             if (A[i] == leader) {
-                leftLeaderCount++;
-                rightLeaderCount--;
+                if (i > 0) {
+                    leftLeaderSum[i] = leftLeaderSum[i - 1] + 1;
+                } else {
+                    leftLeaderSum[i] = 1;
+                }
+            } else {
+                if (i > 0) {
+                    leftLeaderSum[i] = leftLeaderSum[i - 1];
+                }
+            }
+            // System.out.println("leftLeaderSum["+ i +"] : " + leftLeaderSum[i]);
+        }
+
+        for (int i = A.length - 1; i >= 0; i--) {
+            if (A[i] == leader) {
+                if (i < A.length - 1) {
+                    rightLeaderSum[i] = rightLeaderSum[i + 1] + 1;
+                } else {
+                    rightLeaderSum[i] = 1;
+                }
+            } else {
+                if (i < A.length - 1) {
+                    rightLeaderSum[i] = rightLeaderSum[i + 1];
+                }
             }
 
-            if(leftLeaderCount > (leftCount / 2) && rightLeaderCount > (rightCount / 2)) {
+            // System.out.println("rightLeaderSum["+ i +"] : " + rightLeaderSum[i]);
+        }
+
+            
+
+
+        int result  = 0;
+        for (int i = 0; i < A.length - 1; i++) {
+
+            int leftHalf = (i + 1) / 2;
+            int rightHalf = (A.length - i - 1) / 2;
+
+            // System.out.println("leftHalf : " + leftHalf);
+            // System.out.println("rightHalf : " + rightHalf);
+
+            if (leftLeaderSum[i] > leftHalf && rightLeaderSum[i + 1] > rightHalf) {
                 result++;
             }
         }
 
-        return result;
-    }
+        // System.out.println("result : " + result);
 
+        return result;
+
+    }
+    
     public static void main(String[] args) {
         EquiLeader test = new EquiLeader();
         System.out.println(test.solution(new int[] {4, 3, 4, 4, 4, 2}));
