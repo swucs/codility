@@ -35,6 +35,12 @@ import java.util.Stack;
  */
 
 /**
+ * 첫 숫자는 벽돌을 만들어야 하므로 count 증가 후 stack에 넣는다.
+ * 요소가 stack 값 보다 크다는 것은 높이 쌓아야 하므로 새로운 벽돌이 필요함을 의미 하므로 count 증가후 stack에 넣는다.
+ * 요소가 stack 값 보다 작다는 것은 stack의 벽돌은 끝내야 함을 의미하므로 stack에서 계속 지우다가 
+   모든 stack이 비었다는 것은 지금까지 중 가장 낮은 높이이므로 
+   기존 벽돌을 마무리해야 함을 뜻하므로 count++ 한 후 stack에 넣는다.
+   요소가 stack값과 같다는 것은 기존 벽돌 높이와 같으므로 벽돌을 더 만들 필요가 없으므로 아무런 작업을 하지 않는다.
  * https://app.codility.com/demo/results/trainingQJ3KVA-CGZ/    => 100%
  *
  */
