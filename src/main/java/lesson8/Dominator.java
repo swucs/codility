@@ -37,6 +37,7 @@ import java.util.*;
  */
 
 /**
+ * 문제의 번역이 잘못되었다. "A의 요소 중 절반 이상에서 발생" -> more than 이므로 초과라고 번역해야 할듯.
  * 숫자에 대한 count를 Map에 담고, 나중에 Map에 담긴 count가 A의 length의 과반을 넘었는지 체크한다.
  */
 public class Dominator {
@@ -55,11 +56,8 @@ public class Dominator {
 
         final int half = A.length / 2;
 
-        Iterator<Map.Entry<Integer, List<Integer>>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, List<Integer>> entry = iterator.next();
-            List<Integer> list = entry.getValue();
-
+        for (Integer key : map.keySet()) {
+            List<Integer> list = map.get(key);
             if (list != null && list.size() > half) {
                 return list.get(0);
             }
