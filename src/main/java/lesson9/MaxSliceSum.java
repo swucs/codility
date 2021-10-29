@@ -29,9 +29,6 @@ package lesson9;
 
 /**
  * https://www.youtube.com/watch?v=WpH0_YzjX78  => 카데인 알고리즘
- * 마이너스 값을 더하지 않는 이상 계속 더하면 MAX값이 된다. 
-    즉 양수인 경우 무조건 더하면 max값이 되는 것이고, 중간에 마이너스가 섞인 경우는 
-    여태껏 더한 값이 현재 위치의 값보다 더 작을 수 있으므로 기존 합계값은 버리고 현재 위치 부터 다시 시작해서 더해야 ㅎㅏㄴㄷㅏ.
  * https://app.codility.com/demo/results/trainingDSP3TT-BDT/    => 100%
  */
 public class MaxSliceSum {
