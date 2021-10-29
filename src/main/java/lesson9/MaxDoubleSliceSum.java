@@ -51,6 +51,7 @@ package lesson9;
 /**
  * https://pkiop.tistory.com/218 => 참고
  * https://app.codility.com/demo/results/trainingCB7C3M-PMG/    => 100%
+ * Math.max(0, value)처럼 0과 비교해 주는 이유는, X,Y가 인접한 경우와 Y,Z가 인접한 경우 값이 0이므로 값으로 넣을 수 있는 가장 작은 값이다.
  */
 public class MaxDoubleSliceSum {
     public int solution(int[] A) {
@@ -68,6 +69,7 @@ public class MaxDoubleSliceSum {
         }
 
         int max = 0;
+        //(0, 1, 5)처럼 앞에 x, y가 인접할 수도 있으므로. i = 0부터 시작한다.
         for (int i = 0; i < A.length - 2; i++) {
             max = Math.max(leftSumArray[i] + rightSumArray[i + 2], max);
         }
