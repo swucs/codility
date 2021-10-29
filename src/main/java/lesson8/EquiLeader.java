@@ -55,19 +55,9 @@ import java.util.*;
  * https://app.codility.com/demo/results/trainingEF3A96-R3M/    => 88% O(N)
  * https://app.codility.com/demo/results/trainingXTSDHP-NXW/    => 100% 누적값으로 로직을 변경하니 100%됨.
  */
+
+
 public class EquiLeader {
-    public int solution(int[] A) {
-        // write your code in Java SE 8
-
-        int result = 0;
-
-// you can also use imports, for example:
-import java.util.*;
-
-// you can write to stdout for debugging purposes, e.g.
-// System.out.println("this is a debug message");
-
-class EquiLeader {
     public int solution(int[] A) {
         // write your code in Java SE 8
         Integer leader = null;

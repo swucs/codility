@@ -41,33 +41,62 @@ import java.util.Arrays;
 /**
  * https://app.codility.com/demo/results/trainingM9MDT6-N4D/       55% => 반환값을 이익값이므로 0이상의 값을 반환해야 함(마이너스 반환 금지)
  * https://app.codility.com/demo/results/training4Z9N53-2TX/       66% => 정합도 100%
- * 2구역으로 배열을 나눈후 왼쪽에서는 가장 작은 수, 오른쪽에서는 가장 큰 수를 찾아 뺀 값이 가장 큰 값을 찾는다.
+ * https://app.codility.com/demo/results/trainingXBT64J-NUQ/       100%
  *
+ * 1.왼쪽에서 오른쪽으로 MIN값을 누적해서 배열을 만든다.
+ * 2.오른쪽에서 왼쪽으로 MAX값을 누적해서 배열을 만든다.
+ * 3. 만든 배열로 계산을한다. 오른쪽[i + 1] - 왼쪽[i] 중 MAX값을 찾는다.
+ * A가 null이거나 1개일 수 있으므로 예외처리 해야 한다.
+ * 결과가 마이너스 이면 0을 반환해야 한다.
  */
 public class MaxProfit {
     public int solution(int[] A) {
         // write your code in Java SE 8
 
-        Integer maxProfit = null;
+        if (A.length < 2) {
+            return 0;
+        }
+
+        int maxProfit =  0;
+
+        int[] leftMinAccum = new int[A.length];
+        leftMinAccum[0] = A[0];
         for (int i = 1; i < A.length; i++) {
-            int[] leftArray = Arrays.copyOfRange(A, 0, i);
-            int[] rightArray = Arrays.copyOfRange(A, i, A.length);
+            if (A[i] < leftMinAccum[i - 1]) {
+                leftMinAccum[i] = A[i];
+            } else {
+                leftMinAccum[i] = leftMinAccum[i - 1];
+            }
 
-            Arrays.sort(leftArray);
-            Arrays.sort(rightArray);
+            // System.out.print("leftMinAccum[i] " + leftMinAccum[i]);
+        }
 
-            int profit = rightArray[rightArray.length - 1] - leftArray[0];
-            if (maxProfit == null || (profit > maxProfit)) {
+        int[] rightMaxAccum = new int[A.length];
+        rightMaxAccum[A.length - 1] = A[A.length - 1];
+        for (int i = A.length - 2; i >= 0; i--) {
+            if (A[i] > rightMaxAccum[i + 1]) {
+                rightMaxAccum[i] = A[i];
+            } else {
+                rightMaxAccum[i] = rightMaxAccum[i + 1];
+            }
+            // System.out.print("rightMaxAccum[i] " + rightMaxAccum[i]);
+        }
+
+
+        for (int i = 0; i < A.length - 1; i++) {
+            int profit = rightMaxAccum[i + 1] - leftMinAccum[i];
+            if (profit > maxProfit) {
                 maxProfit = profit;
             }
         }
 
-        if (maxProfit == null || maxProfit < 0) {
+        if (maxProfit < 0) {
             maxProfit = 0;
         }
 
         return maxProfit;
     }
+
 
     public static void main(String[] args) {
         MaxProfit test = new MaxProfit();
