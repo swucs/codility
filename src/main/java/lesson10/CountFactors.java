@@ -21,23 +21,20 @@ package lesson10;
 
 /**
  * https://app.codility.com/demo/results/trainingAWBFMW-8CT/    =>  92%
+ * https://app.codility.com/demo/results/trainingGRB8RH-452/    = > 100%
  */
 public class CountFactors {
     public int solution(int N) {
         // write your code in Java SE 8
         int count = 0;
-        for (int i = 1; i <= N; i++) {
-            if (i * i > N) {
-                break;
-            }
 
-            if (i * i == N) {
-                count++;
-                break;
-            }
-
+        for (int i = 1; i <= Math.sqrt(N); i++) {
             if (N % i == 0) {
-                count = count + 2;
+                count++;
+
+                if (N / i != i) {
+                    count++;
+                }
             }
         }
         return count;

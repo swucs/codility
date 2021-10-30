@@ -1,7 +1,6 @@
 package lesson10;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * N개의 정수로 구성된 비어 있지 않은 배열 A가 제공됩니다.
@@ -79,6 +78,7 @@ import java.util.Map;
 /**
  * https://app.codility.com/demo/results/trainingDGP7JH-M33/    => 72% (정합성 100%, 성능 40%)
  * https://app.codility.com/demo/results/training5MJ5HS-W2V/    => 81% (정합성 100%, 성능 60%)
+ * https://app.codility.com/demo/results/trainingA4N85W-9W2/    => 81% O(N * log(log(N)))
  */
 public class Peaks {
 
@@ -89,56 +89,51 @@ public class Peaks {
             return 0;
         }
 
-
-        //Peak를 구함
-        Map<Integer, Integer> peaks = new HashMap();
+        // write your code in Java SE 8
+        int[] peakSumAcuum = new int[A.length];     //peak갯수를 누적한 배열
+        List<Integer> peaks = new ArrayList<>();
         for (int i = 1; i < A.length - 1; i++) {
             if (A[i] > A[i - 1] && A[i] > A[i + 1]) {
-                peaks.put(i, i);
+                peaks.add(i);
+                peakSumAcuum[i] = peakSumAcuum[i - 1] + 1;
+            } else {
+                peakSumAcuum[i] = peakSumAcuum[i - 1];
             }
         }
+        //마지막 Idx에 대한 데이터 입력
+        peakSumAcuum[A.length - 1] = peakSumAcuum[A.length - 2];
 
-        for (int i = peaks.size(); i > 0 ; i--) {
+        //peak갯수가 블럭이 나올 수 있는 최대 갯수.
+        //최대 갯수 부터 시작해서 블럭마다 peak가 존재하는지 체크한다.
+        for (int peak = peaks.size(); peak >= 1; peak--) {
 
-            //동일한 구간이 나오지 않는 경우 SKIP
-            if (A.length % i != 0) {
+            //동일한 구간으로 블럭을 나눠야 하므로 동일한 구간이 나오지 않는 경우 SKIP
+            if (A.length % peak != 0) {
                 continue;
             }
 
-            //블럭의 크기
-            int blockSize = A.length / i;
+            int blockSize = A.length / peak;
+            int count = 0;
+            for (int i = 0; i < peak; i++) {
+                int start = i * blockSize;
+                int end = (i + 1) * blockSize - 1;
 
-            //모든 블럭에 Peak가 존재하는지 여부
-            boolean isBlockPeak = true;
-            for (int j = i; j <= i ; j++) {
-                if (!existsPeak((j - 1) * blockSize, j * blockSize - 1, peaks)) {
-                    isBlockPeak = false;
+                if (peakSumAcuum[end] - peakSumAcuum[start] <= 0) {
+                    //해당 구간에 peak가 없다면 그 다음 peak로 넘어간다.
                     break;
                 }
+
+                count++;
             }
-            if (isBlockPeak) {
-                return i;
+
+            if (count == peak) {
+                return peak;
             }
 
         }
+
 
         return 0;
-    }
-
-    /**
-     * 해당 구간에 peak가 있는지 검사
-     * @param from
-     * @param to
-     * @param peaks
-     * @return
-     */
-    private boolean existsPeak(int from, int to, Map<Integer, Integer> peaks) {
-        for (int i = from; i <= to; i++) {
-            if (peaks.containsKey(i)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void main(String[] args) {
