@@ -57,7 +57,7 @@ public class CountSemiprimes {
         int[] A = new int[N + 1];
         A[0] = 1;
         A[1] = 1;
-        //에라노테스의 체를 이용하여 소수를 구한다.
+        //에라노스테네스의 체를 이용하여 소수를 구한다.
         for (int i = 2; i <= N; i++) {
             int j = 2;
             while (true) {
