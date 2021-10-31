@@ -48,55 +48,67 @@ import java.util.Map;
 
 /**
  * https://app.codility.com/demo/results/trainingKW4DRF-D6D/    ==> 66% (정합성 100%, 성능 40%)
+ * https://app.codility.com/demo/results/trainingCQX7CW-DSX/    ==> 100% (accum을 사용해 성능 개선)
  */
 public class CountSemiprimes {
 
     public int[] solution(int N, int[] P, int[] Q) {
-
-
-        //소수 구하기
-        List<Integer> primes = new ArrayList<>();
+        // write your code in Java SE 8
+        int[] A = new int[N + 1];
+        A[0] = 1;
+        A[1] = 1;
+        //에라노테스의 체를 이용하여 소수를 구한다.
         for (int i = 2; i <= N; i++) {
-            //제곱근
-            double sqrt = Math.sqrt(i);
-            boolean isDivisions = false;
-            for (int j = 2; j <= sqrt ; j++) {
-                if (i % j == 0) {
-                    isDivisions = true;
+            int j = 2;
+            while (true) {
+                if (i * j > N) {
                     break;
                 }
+                A[i * j] = 1;
+                j++;
             }
-            if (!isDivisions) {
-                //소수이면
+        }
+
+        List<Integer> primes = new ArrayList<>();
+        for (int i = 1; i <= N; i++) {
+            if (A[i] == 0) {
                 primes.add(i);
             }
         }
 
         //소수를 이용하여 반소수를 구한다.
-        Map<Integer, Integer> semiprimes = new HashMap<>();
-        for (int i : primes) {
-            for (int j : primes) {
-                if (i * j > N) {
+        Set<Integer> semiPrimes = new HashSet<>();
+        for (int prime1 : primes) {
+            for (int prime2 : primes) {
+                if (prime1 * prime2 <= N) {
+                    semiPrimes.add(prime1 * prime2);
+                } else {
                     break;
                 }
-                int product = i * j;
-                semiprimes.put(product, product);
+            }
+        }
+        // System.out.println("semiPrimes: " + semiPrimes);
+        //반소수 합계의 누적 배열
+        int[] semiPrimeAcuum = new int[N + 1];
+        for (int i = 1; i < semiPrimeAcuum.length; i++) {
+            semiPrimeAcuum[i] = semiPrimeAcuum[i - 1];
+            if (semiPrimes.contains(i)) {
+                semiPrimeAcuum[i]++;
             }
         }
 
+        //accum을 이용해서 반소수의 count를 계산한다.
         int[] result = new int[P.length];
         for (int i = 0; i < P.length; i++) {
-            int countSempiprimeCount = 0;
-            for (int j = P[i]; j <= Q[i]; j++) {
-                if (semiprimes.containsKey(j)) {
-                    countSempiprimeCount++;
-                }
-            }
-            result[i] = countSempiprimeCount;
-        }
-        
-        return result;
+            int start = P[i] - 1;
+            int end = Q[i];
 
+            result[i] = semiPrimeAcuum[end] - semiPrimeAcuum[start];
+            // System.out.println("result[i]: " + result[i]);
+        }
+
+
+        return result;
     }
 
     public static void main(String[] args) {
