@@ -11,11 +11,11 @@ class HashTableTest {
     public void testHashTable() {
 
         System.out.println("test");
-        HashTable<String, String> hashTable = new HashTable<>(100);
+        HashTable<String, String> hashTable = new HashTable<>(2);
 
         hashTable.put("test", "박한나");
         hashTable.put("test2", "박한나2");
-        hashTable.put("test3", "박한나2");
+        hashTable.put("test3", "박한나3");
 
 
         assertThat(hashTable.get("test")).isEqualTo("박한나");
@@ -23,6 +23,8 @@ class HashTableTest {
         assertThat(hashTable.get("test3")).isEqualTo("박한나3");
 
         System.out.println("hashTable.get(\"test\") = " + hashTable.get("test"));
+        System.out.println("hashTable.get(\"test2\") = " + hashTable.get("test2"));
+        System.out.println("hashTable.get(\"test3\") = " + hashTable.get("test3"));
 
     }
 

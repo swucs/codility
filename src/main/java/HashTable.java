@@ -30,7 +30,9 @@ public class HashTable<K, V> {
                 nodes[index] = new LinkedList<>();
             }
             nodes[index].add(new Node<>(key, value));
+            System.out.println("nodes[index] = " + nodes[index]);
         }
+
     }
 
     public V get(K key) {
@@ -59,23 +61,8 @@ public class HashTable<K, V> {
     }
 
     private int getIndex(K key) {
-        System.out.println("key.hashCode() = " + key.hashCode());
-        System.out.println("key.hashCode() % size = " + key.hashCode() % size);
         return key.hashCode() % size;
     }
 
-    public static void main(String[] args) {
-
-        HashTable<String, String> hashTable = new HashTable<>(100);
-
-        String test = "박한나3";
-        hashTable.put("test", "박한나");
-        hashTable.put("test2", test);
-        hashTable.put("test3", test);
-
-        System.out.println("hashTable.get(\"test\") = " + hashTable.get("test"));
-        System.out.println("hashTable.get(\"test2\") = " + hashTable.get("test2"));
-        System.out.println("hashTable.get(\"test3\") = " + hashTable.get("test3"));
-    }
 
 }
