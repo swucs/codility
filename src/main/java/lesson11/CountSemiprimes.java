@@ -2,8 +2,10 @@ package lesson11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 프라임 처음 몇 프라임 정수 2, 3, 5, 7, 11, 13 및 1이다 X. : 정확히 두 개의 별개의 약수를 가진 양의 정수 X이다.
